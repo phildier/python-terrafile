@@ -20,9 +20,14 @@ pterrafile [path]
 
 If `path` is provided, it must be the path to a `Terrafile` file, or a directory containing one. If not provided, it looks for the file in the current working directory.
 
+Add a `module_path` key to the Terrafile to specify the module destination
+path relative to the Terrafile location, or an absolute path.
+
 ## Examples
 
 ```yaml
+module_path: modules
+
 # Terraform Registry module
 terraform-aws-lambda:
   source: "claranet/lambda/aws"

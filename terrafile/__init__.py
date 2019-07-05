@@ -54,6 +54,13 @@ def get_terrafile_path(path):
     else:
         return path
 
+def get_module_path(terrafile_path, terrafile):
+    if "module_path" not in terrafile.keys():
+        return os.path.dirname(terrafile_path)
+    elif os.path.isdir(terrafile["module_path"]):
+        return terrafile["module_path"]
+    else:
+        return os.path.join(os.path.dirname(terrafile_path), terrafile["module_path"])
 
 def read_terrafile(path):
     try:
@@ -92,12 +99,14 @@ def is_valid_registry_source(source):
 
 def update_modules(path):
     terrafile_path = get_terrafile_path(path)
-    module_path = os.path.dirname(terrafile_path)
-    module_path_name = os.path.basename(os.path.abspath(module_path))
-
     terrafile = read_terrafile(terrafile_path)
 
+    module_path = get_module_path(terrafile_path, terrafile)
+    module_path_name = os.path.basename(os.path.abspath(module_path))
+
     for name, repository_details in sorted(terrafile.items()):
+        if name == "module_path": continue
+
         target = os.path.join(module_path, name)
         source = repository_details['source']
 
